@@ -1,0 +1,17 @@
+[project]
+name = "ecommerce-ai-assistant"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "saqibmurtaza", email = "saqibmurtazakhan@gmai.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+ecommerce-ai-assistant = "ecommerce_ai_assistant:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
