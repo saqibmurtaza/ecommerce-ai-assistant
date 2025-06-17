@@ -7,7 +7,24 @@ authors = [
     { name = "saqibmurtaza", email = "saqibmurtazakhan@gmai.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "httpx", # For async HTTP calls (Sanity API, Supabase API)
+    "requests",
+    "python-dotenv", # Optional: For managing secrets
+    "chainlit", # Chainlit frontend
+    "pydantic", # FastAPI models
+    "asyncio", # Required by httpx for async support
+    "rich", # For better CLI logs (optional)
+    "orjson", # Faster JSON parsing in FastAPI (optional)
+    "supabase>=2.15.1",
+    "sqlmodel>=0.0.24",
+    "pydantic-settings>=2.9.1",
+    "psycopg2-binary>=2.9.10",
+    "asyncpg>=0.30.0",
+    "openai-agents>=0.0.17",
+]
 
 [project.scripts]
 ecommerce-ai-assistant = "ecommerce_ai_assistant:main"
@@ -15,3 +32,6 @@ ecommerce-ai-assistant = "ecommerce_ai_assistant:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/backend"]

@@ -1,0 +1,32 @@
+{
+  "root": true,
+  "project": {
+    "name": "ecommerce_ai_assistant"
+  },
+  "api": {
+    "projectId": "73s6ouc3",
+    "dataset": "production"
+  },
+  "studioUrl": "http://localhost:3333",
+  "plugins": [
+    "@sanity/base",
+    "@sanity/default-layout",
+    "@sanity/default-login",
+    
+    "@sanity/vision"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "@sanity/vision"
+      ]
+    }
+  },
+  "parts": [
+    {
+      "name": "part:@sanity/base/schema",
+      "path": "./schemaTypes/index.ts"
+    }
+    
+  ]
+}
