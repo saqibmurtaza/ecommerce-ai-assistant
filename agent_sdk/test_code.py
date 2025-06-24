@@ -4,6 +4,7 @@ from agents import Agent, Runner
 from agents import Agent, RunConfig, Runner, OpenAIChatCompletionsModel, set_tracing_disabled, set_default_openai_api
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
+from agents import enable_verbose_stdout_logging
 
 load_dotenv()
 
@@ -57,101 +58,102 @@ config= RunConfig(
 ####################################################
 # RunItemStreamEvent dataclass
 #####################################################
-# import asyncio
-# import random
-# from agents import Agent, ItemHelpers, Runner, function_tool
+import asyncio
+import random
+from agents import Agent, ItemHelpers, Runner, function_tool
 
-# @function_tool
-# def how_many_jokes() -> int:
-#     return random.randint(1, 10)
+@function_tool
+def how_many_jokes() -> int:
+    return random.randint(1, 10)
 
 
-# async def main():
-#     agent = Agent(
-#         name="Joker",
-#         instructions="First call the `how_many_jokes` tool, then tell that many jokes.",
-#         tools=[how_many_jokes],
-#     )
+async def main():
+    agent = Agent(
+        name="Joker",
+        instructions="First call the `how_many_jokes` tool, then tell that many jokes.",
+        tools=[how_many_jokes],
+    )
 
-#     result = Runner.run_streamed(
-#         agent,
-#         input="Hello",
-#         run_config=config
-#     )
-#     print("=== Run starting ===")
+    result = Runner.run_streamed(
+        agent,
+        input="Hello",
+        run_config=config
+    )
+    print("=== Run starting ===")
 
-#     async for event in result.stream_events():
+    async for event in result.stream_events():
 
-#         # We'll ignore the raw responses event deltas
-#         if event.type == "raw_response_event":
-#             continue
-#         # When the agent updates, print that
-#         elif event.type == "agent_updated_stream_event":
-#             print(f"Agent updated: {event.new_agent.name}")
-#             continue
-#         # When items are generated, print them
-#         elif event.type == "run_item_stream_event":
-#             if event.item.type == "tool_call_item":
-#                 print("-- Tool was called")
-#             elif event.item.type == "tool_call_output_item":
-#                 print(f"-- Tool output: {event.item.output}")
-#             elif event.item.type == "message_output_item":
-#                 print(f"-- Message output:\n {ItemHelpers.text_message_output(event.item)}")
-#             else:
-#                 pass  # Ignore other event types
+        # We'll ignore the raw responses event deltas
+        if event.type == "raw_response_event":
+            continue
+        # When the agent updates, print that
+        elif event.type == "agent_updated_stream_event":
+            print(f"Agent updated: {event.new_agent.name}")
+            continue
+        # When items are generated, print them
+        elif event.type == "run_item_stream_event":
+            if event.item.type == "tool_call_item":
+                print("-- Tool was called")
+            elif event.item.type == "tool_call_output_item":
+                print(f"-- Tool output: {event.item.output}")
+            elif event.item.type == "message_output_item":
+                print(f"-- Message output:\n {ItemHelpers.text_message_output(event.item)}")
+            else:
+                pass  # Ignore other event types
             
-#     print("=== Run complete ===")
+    print("=== Run complete ===")
+    enable_verbose_stdout_logging()  # <<< enables detailed logs in terminal
 
 
-# if __name__ == "__main__":
-#     asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
 
 ########################################################
 # Function tools
 ########################################################
-import json
+# import json
 
-from typing_extensions import TypedDict, Any
+# from typing_extensions import TypedDict, Any
 
-from agents import Agent, FunctionTool, RunContextWrapper, function_tool
+# from agents import Agent, FunctionTool, RunContextWrapper, function_tool
 
 
-class Location(TypedDict):
-    lat: float
-    long: float
+# class Location(TypedDict):
+#     lat: float
+#     long: float
 
-@function_tool  
-async def fetch_weather(location: Location) -> str:
+# @function_tool  
+# async def fetch_weather(location: Location) -> str:
     
-    """Fetch the weather for a given location.
+#     """Fetch the weather for a given location.
 
-    Args:
-        location: The location to fetch the weather for.
-    """
-    # In real life, we'd fetch the weather from a weather API
-    return "sunny"
-
-
-@function_tool(name_override="fetch_data")  
-def read_file(ctx: RunContextWrapper[Any], path: str, directory: str | None = None) -> str:
-    """Read the contents of a file.
-
-    Args:
-        path: The path to the file to read.
-        directory: The directory to read the file from.
-    """
-    # In real life, we'd read the file from the file system
-    return "<file contents>"
+#     Args:
+#         location: The location to fetch the weather for.
+#     """
+#     # In real life, we'd fetch the weather from a weather API
+#     return "sunny"
 
 
-agent = Agent(
-    name="Assistant",
-    tools=[fetch_weather, read_file],  
-)
+# @function_tool(name_override="fetch_data")  
+# def read_file(ctx: RunContextWrapper[Any], path: str, directory: str | None = None) -> str:
+#     """Read the contents of a file.
 
-for tool in agent.tools:
-    if isinstance(tool, FunctionTool):
-        print(tool.name)
-        print(tool.description)
-        print(json.dumps(tool.params_json_schema, indent=2))
-        print()
+#     Args:
+#         path: The path to the file to read.
+#         directory: The directory to read the file from.
+#     """
+#     # In real life, we'd read the file from the file system
+#     return "<file contents>"
+
+
+# agent = Agent(
+#     name="Assistant",
+#     tools=[fetch_weather, read_file],  
+# )
+
+# for tool in agent.tools:
+#     if isinstance(tool, FunctionTool):
+#         print(tool.name)
+#         print(tool.description)
+#         print(json.dumps(tool.params_json_schema, indent=2))
+#         print()

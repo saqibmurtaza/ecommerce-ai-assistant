@@ -48,7 +48,9 @@ class UserContext(BaseModel):
 
 
 # 🛒 Example: Dynamic Instructions for a Personalized Shopping Assistant
-# you can also provide dynamic instructions via a function. The function will receive the agent and context, and must return the prompt. Both regular and async functions are accepted.
+# you can also provide dynamic instructions via a function. The function 
+# will receive the agent and context, and must return the prompt. 
+# Both regular and async functions are accepted.
 from agents import RunContextWrapper
 
 def dynamic_instructions(
