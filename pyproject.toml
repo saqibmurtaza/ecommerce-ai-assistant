@@ -25,6 +25,7 @@ dependencies = [
     "asyncpg>=0.30.0",
     "openai-agents>=0.0.17",
     "agentops>=0.4.15",
+    "litellm==1.67.1",
 ]
 
 [project.scripts]
